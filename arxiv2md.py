@@ -1,14 +1,27 @@
 #!/usr/bin/python
 
-# arxiv2md.py: fetch the latest arXiv listing and transform it to markdown
-# Copyright 2014 Micha Moskovic
-# 
-# Licensed under the "THE BEER-WARE LICENSE" (Revision 42):
-# Micha Moskovic wrote this file. As long as you retain this notice you
-# can do whatever you want with this stuff. If we meet some day, and you think
-# this stuff is worth it, you can buy me a beer or coffee in return
+# arxiv2md.py: fetch the latest arXiv listings and transform them to markdown
+# Copyright (C) 2014 Micha Moskovic
 
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
 
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+# DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+# OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ 
 from __future__ import print_function
 import feedparser
 import subprocess
@@ -41,7 +54,7 @@ def parse_archive(archive, updates=True, link_to="pdf"):
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="fetch the latest arXiv listings and transform them to markdown")
     parser.add_argument("archive", help="an archive to fetch", nargs="+")
     parser.add_argument("-r", "--replacements", help="also fetch the replacements", action="store_true", default=False)
     parser.add_argument("-a", "--link-to-abstract", help="make the links point to the abstracts rather than the PDFs", action="store_true", default=False)
