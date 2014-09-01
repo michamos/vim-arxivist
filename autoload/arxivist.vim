@@ -7,7 +7,7 @@ function! arxivist#open_entry(date)
   elseif a:date =~ "yesterday"
     let date = strftime("%F", localtime()-86400)
   else
-    let date = string(a:date)
+    let date = a:date
   endif
   let file = expand(g:arxivist_dir) . date . ".md" 
   if date == today
