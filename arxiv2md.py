@@ -30,7 +30,7 @@ import re
 
 def parse_archive(archive, updates=True, link_to="pdf"):
     out = u""
-    d = feedparser.parse("http://export.arxiv.org/rss/{}?version=2.0".format(archive))
+    d = feedparser.parse("http://export.arxiv.org/rss/{}".format(archive))
     day = time.strftime("%F", d.feed.updated_parsed)
     if updates:
         update_string=u"with replacements"
@@ -41,6 +41,7 @@ def parse_archive(archive, updates=True, link_to="pdf"):
         if (not updates) and entry.title.endswith("UPDATED)"):
             break
         out = out + u"<h2>{}</h2>\n".format(entry.title)
+        out = out + u"<p>Authors: {}</p>\n".format(entry.author)
         out = out + u"<a href='{}'>Link</a>\n".format(entry.link.replace("abs",link_to,1))
         out = out + entry.summary+u"\n"
     pandoc = subprocess.Popen("pandoc -R -f html -t markdown --atx-headers".split(), stdin=subprocess.PIPE, stdout=subprocess.PIPE)
