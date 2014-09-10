@@ -5,8 +5,6 @@ function! arxivist#open_entry(date,...)
   let bang = a:0 && a:1 ? '!' : ''
   if empty(a:date)
     let date = today
-  elseif a:date ==? "yesterday"
-    let date = strftime("%F", localtime()-86400)
   elseif a:date =~# '^/' "date is actually a pattern
     call arxivist#search( substitute(a:date, '^/', '', '') )
     return
@@ -31,6 +29,11 @@ function! arxivist#open_entry(date,...)
   endif
 endfunction
 
+function! arxivist#open_next_entry(direction, ...)
+  let current_date = expand("%:r")
+  call arxivist#open_entry( arxivist#get_next_date(current_date, a:direction), a:0 && a:1 ? a:1 : '')
+endfunction
+
 function! arxivist#new_entry(today)
   let header_text = "% Journal entry for " . a:today
   execute "normal! i". header_text . "\n\n"
@@ -43,13 +46,23 @@ function! arxivist#new_entry(today)
   endif
 endfunction
 
-function! arxivist#complete_command(A,L,P)
+function! arxivist#list_existing_dates()
   let old_pwd = getcwd()
   execute 'lcd' g:arxivist_dir
   let markdown_files = glob('*.md')
   execute 'lcd' old_pwd
   "drop '.md' extension
-  return substitute(markdown_files, '\.md\(\n\|$\)', '\1', 'g')
+  return split(substitute(markdown_files, '\.md\(\n\|$\)', '\1', 'g'), '\n')
+endfunction
+
+function! arxivist#get_next_date(date, ...)
+  let direction = a:0 > 0 && a:1 < 0 ? -1 : 1
+  let dates = arxivist#list_existing_dates()
+  return get(dates, index(dates, a:date)+direction, strftime("%F"))
+endfunction
+
+function! arxivist#complete_command(A,L,P)
+  return join( reverse( copy(arxivist#list_existing_dates()) ), "\n")
 endfunction
 
 function! arxivist#search(pattern)
@@ -78,3 +91,8 @@ function! arxivist#open_current_link()
   call setpos(".",pos)
 endfunction
 
+function! arxivist#init_buffer()
+  map <buffer><silent> <CR> :call arxivist#open_current_link()<CR>
+  command! -bang -buffer ArxivistNext call arxivist#open_next_entry(1, <bang>0)
+  command! -bang -buffer ArxivistPrevious call arxivist#open_next_entry(-1, <bang>0)
+endfunction

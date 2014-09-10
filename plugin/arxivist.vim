@@ -7,5 +7,5 @@ command! -bang -nargs=? -complete=custom,arxivist#complete_command Arxivist call
 
 augroup arxivist
   autocmd!
-  execute "autocmd BufEnter" g:arxivist_dir . '*.md map <buffer><silent> <CR> :call arxivist#open_current_link()<CR>'
+  execute "autocmd BufEnter" g:arxivist_dir . '*.md call arxivist#init_buffer()'
 augroup END
