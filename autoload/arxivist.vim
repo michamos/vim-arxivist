@@ -63,3 +63,17 @@ function! arxivist#search(pattern)
   let pattern = "'" . substitute(a:pattern, '\s\+', '\\s+', 'g') . "'"
   execute search_command pattern g:arxivist_dir
 endfunction
+
+function! arxivist#open_current_link()
+  let last_search=@/
+  let pos = getpos(".")
+  if search('##', "cbW") == 0
+    "there is no previous subsection
+    return
+  endif
+  call search('\[Link](.', "ceW")
+  normal gx
+  let @/=last_search
+  call setpos(".",pos)
+endfunction
+
