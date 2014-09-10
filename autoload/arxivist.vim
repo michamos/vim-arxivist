@@ -1,7 +1,8 @@
 let s:arxiv2md = expand('<sfile>:p:h') . '/../arxiv2md.py'
 
-function! arxivist#open_entry(date)
+function! arxivist#open_entry(date,...)
   let today = strftime("%F")
+  let bang = a:0 && a:1 ? '!' : ''
   if empty(a:date)
     let date = today
   elseif a:date ==? "yesterday"
@@ -15,13 +16,13 @@ function! arxivist#open_entry(date)
   let file = expand(g:arxivist_dir) . date . ".md"
   if date == today
     if filereadable(file)
-      execute "edit " . file
+      execute "edit" . bang file
     else
-      execute 'edit +call\ arxivist#new_entry(today) ' . file
+      execute 'edit' . bang  '+call\ arxivist#new_entry(today)' file
     endif
   else
     if filereadable(file)
-      execute 'view +set\ nomodifiable' file
+      execute 'view' . bang '+set\ nomodifiable' file
     else
       echohl ErrorMsg
       echomsg "Arxivist: No entry for" date
