@@ -39,7 +39,7 @@ function! arxivist#new_entry(today)
   execute "normal! i". header_text . "\n\n"
   echon "Fetch the "  g:arxivist_archive  " new listing? (Y/n)"
   let answer = nr2char(getchar())
-  if answer =~? "\[y\<CR>\]"
+  if answer =~? "\[y\<CR>\<Space>\]"
     echo "Fetching the arXiv..."
     silent execute "read!" . s:arxiv2md  g:arxivist_archive
     redraw
