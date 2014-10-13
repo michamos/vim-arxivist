@@ -93,6 +93,6 @@ endfunction
 
 function! arxivist#init_buffer()
   map <buffer><silent> <CR> :call arxivist#open_current_link()<CR>
-  command! -bang -buffer ArxivistNext call arxivist#open_next_entry(1, <bang>0)
-  command! -bang -buffer ArxivistPrevious call arxivist#open_next_entry(-1, <bang>0)
+  command! -bang -buffer Narxivist call arxivist#open_next_entry(1, <bang>0)
+  command! -bang -buffer Parxivist call arxivist#open_next_entry(-1, <bang>0)
 endfunction
