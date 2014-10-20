@@ -12,20 +12,14 @@ function! arxivist#open_entry(date,...)
     let date = a:date
   endif
   let file = expand(g:arxivist_dir) . date . ".md"
-  if date == today
-    if filereadable(file)
-      execute "edit" . bang file
-    else
-      execute 'edit' . bang  '+call\ arxivist#new_entry(today)' file
-    endif
+  if filereadable(file)
+    execute "edit" . bang file
+  elseif date == today
+    execute 'edit' . bang  '+call\ arxivist#new_entry(today)' file
   else
-    if filereadable(file)
-      execute 'view' . bang '+set\ nomodifiable' file
-    else
-      echohl ErrorMsg
-      echomsg "Arxivist: No entry for" date
-      echohl None
-    endif
+    echohl ErrorMsg
+    echomsg "Arxivist: No entry for" date
+    echohl None
   endif
 endfunction
 
@@ -95,4 +89,7 @@ function! arxivist#init_buffer()
   map <buffer><silent> <CR> :call arxivist#open_current_link()<CR>
   command! -bang -buffer Narxivist call arxivist#open_next_entry(1, <bang>0)
   command! -bang -buffer Parxivist call arxivist#open_next_entry(-1, <bang>0)
+  if strftime("%F") != expand("%:r") "Not opening today's file
+    set nomodifiable readonly
+  endif
 endfunction
