@@ -36,6 +36,18 @@ function! arxivist#new_entry(today)
   if answer =~? "\[y\<CR>\<Space>\]"
     echo "Fetching the arXiv..."
     silent execute "read!" . s:arxiv2md  g:arxivist_archive
+    if v:shell_error
+      3normal! o**There was an error while retrieving the arXiv, please fix it and try again.**
+      normal! o
+      normal! oThis file will **not** be saved!
+      normal! o
+      normal! o---
+      normal! o
+      normal! o*Error log:*
+      normal! o
+      execute "normal! j\<C-V>GI> \<Esc>"
+      setlocal buftype=nowrite bufhidden=delete noswapfile
+    endif
     redraw
   endif
 endfunction
@@ -86,6 +98,7 @@ function! arxivist#open_current_link()
 endfunction
 
 function! arxivist#init_buffer()
+  let b:arxivist_entry = 1
   map <buffer><silent> <CR> :call arxivist#open_current_link()<CR>
   command! -bang -buffer Narxivist call arxivist#open_next_entry(1, <bang>0)
   command! -bang -buffer Parxivist call arxivist#open_next_entry(-1, <bang>0)
