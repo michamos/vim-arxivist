@@ -46,7 +46,9 @@ function! arxivist#new_entry(today)
       normal! o*Error log:*
       normal! o
       execute "normal! j\<C-V>GI> \<Esc>"
+      let sw=&swapfile
       setlocal buftype=nowrite bufhidden=delete noswapfile
+      autocmd! BufLeave % setlocal buftype& bufhidden& | let &swapfile=sw | autocmd! BufLeave %
     endif
     redraw
   endif
