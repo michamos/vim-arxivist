@@ -64,7 +64,23 @@ endfunction
 function! arxivist#get_next_date(date, ...)
   let direction = a:0 > 0 && a:1 < 0 ? -1 : 1
   let dates = arxivist#list_existing_dates()
-  return get(dates, index(dates, a:date)+direction, strftime("%F"))
+  " a:date does note necessarily exist in dates, find the closest one
+  let idx=-1
+  let minidx=-len(dates)
+  while idx >= minidx && dates[idx] >= a:date
+    let idx-=1
+  endwhile
+  if direction > 0
+    let idx+=1
+    if dates[idx] == a:date
+      let idx+=1
+    endif
+    if idx >= 0
+      " produce an invalid index to go to today thanks to default get value
+      let idx = minidx-1
+    endif
+  endif
+  return get(dates, idx, strftime("%F"))
 endfunction
 
 function! arxivist#complete_command(A,L,P)
